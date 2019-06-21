@@ -1,0 +1,118 @@
+{
+  "extends": [
+    "airbnb",
+    "prettier"
+  ],
+  "parser": "babel-eslint",
+  "plugins": [
+    "import",
+    "prettier",
+    "eslint-plugin-import"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 8,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "rules": {
+    "semi": [
+      2,
+      "never"
+    ],
+    "jsx-a11y/anchor-is-valid": [
+      0,
+      {
+        "components": [
+          "Link"
+        ],
+        "specialLink": [
+          "hrefLeft",
+          "hrefRight"
+        ],
+        "aspects": [
+          "noHref",
+          "invalidHref",
+          "preferButton"
+        ]
+      }
+    ],
+    "import/no-unresolved": [
+      2,
+      {
+        "commonjs": true,
+        "amd": true
+      }
+    ],
+    "import/named": 2,
+    "import/namespace": 2,
+    "import/default": 2,
+    "import/export": 2,
+    "no-nested-ternary": "off",
+    "import/no-dynamic-require": "off",
+    "global-require": "off",
+    "react/jsx-filename-extension": [
+      0,
+      {
+        "extensions": [
+          ".js",
+          ".jsx"
+        ]
+      }
+    ],
+    "react/prefer-stateless-function": [
+      1,
+      {
+        "ignorePureComponents": false
+      }
+    ],
+    "react/prop-types": [
+      0
+    ],
+    "no-else-return": "off",
+    "react/no-array-index-key": [
+      0
+    ],
+    "import/prefer-default-export": "off",
+    "max-len": [
+      "warn",
+      {
+        "code": 300
+      }
+    ],
+    "prefer-rest-params": "warn",
+    "prefer-destructuring": "warn",
+    "no-param-reassign": "off",
+    "jsx-a11y/no-noninteractive-element-interactions": "warn",
+    "jsx-a11y/click-events-have-key-events": "off",
+    "jsx-a11y/no-noninteractive-tabindex": "off",
+    "no-underscore-dangle": "off",
+    "react/jsx-no-bind": "warn",
+    "react/no-did-mount-set-state": "warn",
+    "react/no-unused-state": "warn",
+    "camelcase": "off",
+    "no-unused-vars": "warn",
+    "class-methods-use-this": "off",
+    "jsx-a11y/no-static-element-interactions": "warn",
+    "jsx-a11y/label-has-for": "off",
+    "no-restricted-syntax": "off"
+  },
+  "env": {
+    "es6": true,
+    "browser": true,
+    "node": true,
+    "jest": true
+  },
+  "settings": {
+    "import/resolver": {
+      "babel-module": {},
+      "node": {
+        "extensions": [
+          ".js",
+          ".jsx"
+        ]
+      }
+    }
+  }
+}

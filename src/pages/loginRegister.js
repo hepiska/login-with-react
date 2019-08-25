@@ -7,6 +7,7 @@ class LoginRegisterPage extends React.Component {
   state = {
     input: {},
     isValidate: {},
+    error: null,
   }
 
   validationCondition = {
@@ -60,11 +61,25 @@ class LoginRegisterPage extends React.Component {
     const newIsValidate = { ...isValidate }
     newInput[data.name] = data.value
     newIsValidate[data.name] = this.validationCondition[data.name].test(data.value)
-    this.setState({ input: newInput, isValidate: newIsValidate })
+    this.setState({ input: newInput, isValidate: newIsValidate, error: null })
+  }
+
+  _onFormSubmit = (e) => {
+    const { input, isValidate } = this.state
+    const newIsValidate = { ...isValidate }
+    const isValidateAll = this.selectField().reduce((acc, dat) => {
+      newIsValidate[dat.name] = !!isValidate[dat.name]
+      return acc && !!isValidate[dat.name]
+    }, true)
+    if (isValidateAll) {
+      // send to back end
+    } else {
+      this.setState({ isValidate: newIsValidate, error: 'masukan semua field' })
+    }
   }
 
   render() {
-    const { input, isValidate } = this.state
+    const { input, isValidate, error } = this.state
     const { match } = this.props
     return (
       <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
@@ -72,7 +87,7 @@ class LoginRegisterPage extends React.Component {
           <Header as='h2' color='teal' textAlign='center'>
             {match.path === '/login' ? 'Log-in to your account' : 'Wellcome new user'}
           </Header>
-          <Form size='large'>
+          <Form size='large' error={error} onSubmit={this._onFormSubmit}>
             <Segment stacked>
               {this.selectField().map((field) => (
                 <Form.Input
@@ -83,9 +98,15 @@ class LoginRegisterPage extends React.Component {
                   onChange={this._onFieldChange}
                 />
               ))}
-              <Button color='teal' fluid size='large'>
+              <Message
+                error
+                header='error'
+                content={error}
+              />
+              <Button color='teal' type='submit' fluid size='large'>
                 Login
               </Button>
+
             </Segment>
           </Form>
           <Message>

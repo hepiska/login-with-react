@@ -5,22 +5,14 @@ import { Button, Form, Grid, Header, Message, Segment } from 'semantic-ui-react'
 
 class LoginRegisterPage extends React.Component {
   state = {
-    input: {}
+    input: {},
+    isValidate: {},
   }
 
-  fields = [{
-    name: 'email',
-    icon: 'user',
-    iconPosition: 'left',
-    placeholder: 'E-mail address',
-  },
-  {
-    name: 'password',
-    icon: 'lock',
-    iconPosition: 'left',
-    placeholder: 'Password',
-    type: 'password'
-  }]
+  validationCondition = {
+    email: /^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/,
+    password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,10}$/
+  }
 
   selectField = () => {
     const { match } = this.props
@@ -63,15 +55,18 @@ class LoginRegisterPage extends React.Component {
   }
 
   _onFieldChange = (e, data) => {
-    const { input } = this.state
+    const { input, isValidate } = this.state
     const newInput = { ...input }
+    const newIsValidate = { ...isValidate }
     newInput[data.name] = data.value
-    this.setState({ input: newInput })
+    newIsValidate[data.name] = this.validationCondition[data.name].test(data.value)
+    this.setState({ input: newInput, isValidate: newIsValidate })
   }
 
   render() {
-    const { input } = this.state
+    const { input, isValidate } = this.state
     const { match } = this.props
+    console.log(isValidate)
     return (
       <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
         <Grid.Column style={{ maxWidth: 450 }}>

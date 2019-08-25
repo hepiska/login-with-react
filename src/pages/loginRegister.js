@@ -1,20 +1,37 @@
 import React from 'react'
-import { Grid, Header, } from 'semantic-ui-react'
+import { Button, Form, Grid, Header, Message, Segment } from 'semantic-ui-react'
 
 
 const LoginRegisterPage = () => {
   return (
-    <Grid
-      style={{ width: '100%', margin: '0px', padding: '0px 20%', height: "100vh" }}
-      textAlign='center'
-      verticalAlign='middle'
-    >
+    <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
       <Grid.Column style={{ maxWidth: 450 }}>
         <Header as='h2' color='teal' textAlign='center'>
-          Login Register Page
+          Log-in to your account
         </Header>
+        <Form size='large'>
+          <Segment stacked>
+            <Form.Input fluid icon='user' iconPosition='left' placeholder='E-mail address' />
+            <Form.Input
+              fluid
+              icon='lock'
+              iconPosition='left'
+              placeholder='Password'
+              type='password'
+            />
+
+            <Button color='teal' fluid size='large'>
+              Login
+            </Button>
+          </Segment>
+        </Form>
+        <Message>
+          New to us?
+          <a href='#'>Sign Up</a>
+        </Message>
       </Grid.Column>
     </Grid>
+
   )
 }
 

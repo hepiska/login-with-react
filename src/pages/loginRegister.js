@@ -66,7 +66,6 @@ class LoginRegisterPage extends React.Component {
   render() {
     const { input, isValidate } = this.state
     const { match } = this.props
-    console.log(isValidate)
     return (
       <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
         <Grid.Column style={{ maxWidth: 450 }}>
@@ -76,7 +75,13 @@ class LoginRegisterPage extends React.Component {
           <Form size='large'>
             <Segment stacked>
               {this.selectField().map((field) => (
-                <Form.Input fluid {...field} value={input[field.name]} onChange={this._onFieldChange} />
+                <Form.Input
+                  fluid
+                  {...field}
+                  value={input[field.name]}
+                  error={isValidate[field.name] !== undefined && !isValidate[field.name]}
+                  onChange={this._onFieldChange}
+                />
               ))}
               <Button color='teal' fluid size='large'>
                 Login

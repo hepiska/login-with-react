@@ -8,9 +8,8 @@ const HtmlPlug = new HtmlWebpackPlug({
 
 module.exports = {
   entry: [
-    'react-hot-loader/patch',
+    'react-hot-loader/babel',
     // 'babel-polyfill',
-    // 'webpack/hot/only-dev-server',
     './src/index.js'
   ],
   output: {
@@ -19,7 +18,9 @@ module.exports = {
     chunkFilename: 'js/[name].js',
     publicPath: '/'
   },
+  devtool: 'eval',
   devServer: {
+    watchContentBase: true,
     historyApiFallback: true,
   },
   module: {

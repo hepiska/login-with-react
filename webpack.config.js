@@ -9,7 +9,7 @@ const HtmlPlug = new HtmlWebpackPlug({
 module.exports = {
   entry: [
     'react-hot-loader/babel',
-    // 'babel-polyfill',
+    '@babel/polyfill',
     './src/index.js'
   ],
   output: {

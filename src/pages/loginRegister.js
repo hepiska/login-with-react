@@ -1,5 +1,6 @@
 import React from 'react'
-import { Button, Form, Grid, Header, Message, Segment } from 'semantic-ui-react'
+import axios from 'axios'
+import { Button, Form, Grid, Header, Message, Segment, Loader } from 'semantic-ui-react'
 
 
 
@@ -7,15 +8,16 @@ class LoginRegisterPage extends React.Component {
   state = {
     input: {},
     isValidate: {},
+    isLoading: false,
     error: null,
   }
 
   validationCondition = this.props.match.path === '/login' ? {
     email: /^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/,
-    password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,10}$/
+    password: /^[a-zA-Z0-9]{3,30}$/
   } : {
       email: /^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/,
-      password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,10}$/,
+      password: /^[a-zA-Z0-9]{3,30}$/,
       name: /[\w]{1}/,
     }
 
@@ -68,18 +70,32 @@ class LoginRegisterPage extends React.Component {
     this.setState({ input: newInput, isValidate: newIsValidate, error: null })
   }
 
-  _onFormSubmit = (e) => {
-    const { input, isValidate } = this.state
-    const newIsValidate = { ...isValidate }
-    const isValidateAll = this.selectField().reduce((acc, dat) => {
-      newIsValidate[dat.name] = !!isValidate[dat.name]
-      return acc && !!isValidate[dat.name]
-    }, true)
-    if (isValidateAll) {
-      // send to back end
-    } else {
-      this.setState({ isValidate: newIsValidate, error: 'masukan semua field' })
+  _onFormSubmit = async (e) => {
+    try {
+      const { match } = this.props
+      const { input, isValidate } = this.state
+      const newIsValidate = { ...isValidate }
+      const isValidateAll = this.selectField().reduce((acc, dat) => {
+        newIsValidate[dat.name] = !!isValidate[dat.name]
+        return acc && !!isValidate[dat.name]
+      }, true)
+      if (isValidateAll) {
+        this.setState({ isLoading: true })
+        if (match.path === '/login') {
+          const response = await axios.post('https://pomonatodo.herokuapp.com/auth/login', { ...input })
+          localStorage.setItem('token', response.data.data.token)
+        } else {
+          const response = await axios.post('https://pomonatodo.herokuapp.com/auth/register', { ...input })
+          localStorage.setItem('token', response.data.data.token)
+        }
+        this.setState({ isLoading: false })
+      } else {
+        this.setState({ isValidate: newIsValidate, error: 'masukan semua field', isLoading: false })
+      }
+    } catch (error) {
+      this.setState({ error: error.message, isLoading: false })
     }
+
   }
 
   _changePage = () => {
@@ -91,7 +107,7 @@ class LoginRegisterPage extends React.Component {
   }
 
   render() {
-    const { input, isValidate, error } = this.state
+    const { input, isValidate, error, isLoading } = this.state
     const { match } = this.props
     return (
       <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
@@ -115,9 +131,11 @@ class LoginRegisterPage extends React.Component {
                 header='error'
                 content={error}
               />
-              <Button color='teal' type='submit' fluid size='large'>
-                {match.path === '/login' ? 'Login' : 'Sign up'}
-              </Button>
+              {isLoading ? <Loader active inline /> : (
+                <Button color='teal' type='submit' fluid size='large'>
+                  {match.path === '/login' ? 'Login' : 'Sign up'}
+                </Button>
+              )}
 
             </Segment>
           </Form>

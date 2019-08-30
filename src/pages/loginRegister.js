@@ -113,7 +113,7 @@ class LoginRegisterPage extends React.Component {
       <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
         <Grid.Column style={{ maxWidth: 450 }}>
           <Header as='h2' color='teal' textAlign='center'>
-            {match.path === '/login' ? 'Log-in to your account' : 'Wellcome new user'}
+            {match.path === '/login' ? 'Log-in to your account' : 'Wellcome new users'}
           </Header>
           <Form size='large' error={error} onSubmit={this._onFormSubmit}>
             <Segment stacked>

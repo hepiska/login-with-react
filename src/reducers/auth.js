@@ -9,7 +9,7 @@ const type = {
 
 const initialState = {
   token: localStorage.getItem('token'),
-  isAuth: localStorage.getItem('token') !== null
+  isAuth: !!localStorage.getItem('token')
 }
 
 

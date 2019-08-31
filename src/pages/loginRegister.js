@@ -1,6 +1,12 @@
 import React from 'react'
 import axios from 'axios'
 import { Button, Form, Grid, Header, Message, Segment, Loader } from 'semantic-ui-react'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { LOGIN } from '../reducers/auth'
+import authRedirectHoc from '../hocs/authRedirect'
+
+
 
 
 
@@ -15,11 +21,19 @@ class LoginRegisterPage extends React.Component {
   validationCondition = this.props.match.path === '/login' ? {
     email: /^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/,
     password: /^[a-zA-Z0-9]{3,30}$/
-  } : {
+  } :
+    {
       email: /^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/,
       password: /^[a-zA-Z0-9]{3,30}$/,
       name: /[\w]{1}/,
     }
+
+  componentDidMount() {
+    const { isAuth, history } = this.props
+    if (isAuth) {
+      history.push('/')
+    }
+  }
 
   selectField = () => {
     const { match } = this.props
@@ -61,6 +75,8 @@ class LoginRegisterPage extends React.Component {
     }
   }
 
+
+
   _onFieldChange = (e, data) => {
     const { input, isValidate } = this.state
     const newInput = { ...input }
@@ -72,7 +88,7 @@ class LoginRegisterPage extends React.Component {
 
   _onFormSubmit = async (e) => {
     try {
-      const { match } = this.props
+      const { match, history } = this.props
       const { input, isValidate } = this.state
       const newIsValidate = { ...isValidate }
       const isValidateAll = this.selectField().reduce((acc, dat) => {
@@ -83,12 +99,13 @@ class LoginRegisterPage extends React.Component {
         this.setState({ isLoading: true })
         if (match.path === '/login') {
           const response = await axios.post('https://pomonatodo.herokuapp.com/auth/login', { ...input })
-          localStorage.setItem('token', response.data.data.token)
+          this.props.LOGIN({ token: response.data.data.token })
         } else {
           const response = await axios.post('https://pomonatodo.herokuapp.com/auth/register', { ...input })
-          localStorage.setItem('token', response.data.data.token)
+          this.props.LOGIN({ token: response.data.data.token })
         }
         this.setState({ isLoading: false })
+        // history.push('/')
       } else {
         this.setState({ isValidate: newIsValidate, error: 'masukan semua field', isLoading: false })
       }
@@ -151,5 +168,12 @@ class LoginRegisterPage extends React.Component {
   }
 }
 
+// const mapStateToProps = state => ({ isAuth: state.auth.isAuth })
+const mapDispatchToProps = dispatch => bindActionCreators({
+  LOGIN,
 
-export default LoginRegisterPage
+}, dispatch)
+
+const LoginPageWithAuthRedirect = authRedirectHoc('/', LoginRegisterPage)
+
+export default connect(null, mapDispatchToProps)(LoginPageWithAuthRedirect)

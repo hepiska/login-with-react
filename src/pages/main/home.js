@@ -2,7 +2,7 @@ import React from 'react'
 import { Grid, Header, } from 'semantic-ui-react'
 
 
-const MainPage = () => {
+const HomePage = () => {
   return (
     <Grid
       style={{ width: '100%', margin: '0px', padding: '0px 20%', height: "100vh" }}
@@ -11,7 +11,7 @@ const MainPage = () => {
     >
       <Grid.Column style={{ maxWidth: 450 }}>
         <Header as='h2' color='teal' textAlign='center'>
-          Main pages
+          Home pages
         </Header>
       </Grid.Column>
     </Grid>
@@ -19,4 +19,4 @@ const MainPage = () => {
 }
 
 
-export default MainPage
+export default HomePage

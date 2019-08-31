@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { LOGIN } from '../reducers/auth'
 import GoogleAuth from '../components/googleAuth'
+import FacebookAuth from '../components/facebookAuth'
 import authRedirectHoc from '../hocs/authRedirect'
 
 
@@ -120,6 +121,10 @@ class LoginRegisterPage extends React.Component {
     console.log(userData)
   }
 
+  _onFacebookAuth = (userData) => {
+    console.log(userData)
+  }
+
   _changePage = () => {
     if (this.props.match.path === '/login') {
       this.props.history.push('/register')
@@ -168,6 +173,16 @@ class LoginRegisterPage extends React.Component {
               <Button {..._props} icon fluid style={{ margin: '16px 0px' }}>
                 <Icon name='google' />
                 Sign With Google
+              </Button>
+            )}
+          />
+          <FacebookAuth
+            onSuccess={this._onFacebookAuth}
+            appId='1345810558907241'
+            component={(_props) => (
+              <Button {..._props} icon fluid color='facebook' style={{ margin: '16px 0px' }}>
+                <Icon name='facebook' />
+                Sign With Facebook
               </Button>
             )}
           />

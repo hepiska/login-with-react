@@ -1,9 +1,10 @@
 import React from 'react'
 import axios from 'axios'
-import { Button, Form, Grid, Header, Message, Segment, Loader } from 'semantic-ui-react'
+import { Button, Form, Grid, Header, Message, Segment, Loader, Icon } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { LOGIN } from '../reducers/auth'
+import GoogleAuth from '../components/googleAuth'
 import authRedirectHoc from '../hocs/authRedirect'
 
 
@@ -115,6 +116,10 @@ class LoginRegisterPage extends React.Component {
 
   }
 
+  _onGoogleAuth = (userData) => {
+    console.log(userData)
+  }
+
   _changePage = () => {
     if (this.props.match.path === '/login') {
       this.props.history.push('/register')
@@ -156,6 +161,16 @@ class LoginRegisterPage extends React.Component {
 
             </Segment>
           </Form>
+          <GoogleAuth
+            onSuccess={this._onGoogleAuth}
+            appId='173621131669-9djag01ckvq74r5g6436nd3ddk3q8vi4.apps.googleusercontent.com'
+            component={(_props) => (
+              <Button {..._props} icon fluid style={{ margin: '16px 0px' }}>
+                <Icon name='google' />
+                Sign With Google
+              </Button>
+            )}
+          />
           <Message>
             New to us
             <a href='' onClick={this._changePage}>
